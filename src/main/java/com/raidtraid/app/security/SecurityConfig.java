@@ -1,11 +1,15 @@
-package com.raidtraid.app;
+package com.raidtraid.app.security;
 
+import com.raidtraid.app.ui.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
@@ -25,12 +29,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.oauth2Login().loginPage("/oauth_login")
+        http.oauth2Login().loginPage("/login")
             .authorizationEndpoint()
             .baseUri("/oauth2/authorize-client")
             .authorizationRequestRepository(authorizationRequestRepository())
@@ -38,9 +43,22 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
             .tokenEndpoint()
             .accessTokenResponseClient(accessTokenResponseClient())
             .and()
-            .defaultSuccessUrl("/dashboard")
+            .defaultSuccessUrl("/")
             .failureUrl("/loginFailure");
+
+        setLoginView(http, LoginView.class, "/logout");
     }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        super.configure(web);
+        web.ignoring().antMatchers("/images/**");
+    }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication().withUser("user").password("{noop}userpass").roles("USER");
+//    }
     
     @Bean
     public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
