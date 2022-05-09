@@ -16,7 +16,7 @@ import org.springframework.core.env.Environment;
  * This view is marked with {@code @AnonymousAllowed} to allow all users access
  * to the login page.
  */
-@Route("login")
+@Route("oauth_login")
 @PageTitle("Login")
 @AnonymousAllowed
 public class LoginView extends VerticalLayout {
@@ -30,7 +30,7 @@ public class LoginView extends VerticalLayout {
         setPadding(true);
         setAlignItems(Alignment.CENTER);
 
-        String clientkey = env.getProperty("spring.security.oauth2.client.registration.google.client-id");
+        String clientkey = env.getProperty("spring.security.oauth2.client.registration.twitch.client-id");
 
         // Check that oauth keys are present
         if (clientkey == null || clientkey.isEmpty()) {

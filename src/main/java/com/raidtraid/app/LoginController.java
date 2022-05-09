@@ -31,21 +31,6 @@ public class LoginController {
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
 
-    @GetMapping("/oauth_login")
-    public String getLoginPage(Model model) {
-        Iterable<ClientRegistration> clientRegistrations = null;
-        ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository)
-            .as(Iterable.class);
-        if (type != ResolvableType.NONE && ClientRegistration.class.isAssignableFrom(type.resolveGenerics()[0])) {
-            clientRegistrations = (Iterable<ClientRegistration>) clientRegistrationRepository;
-        }
-
-        clientRegistrations.forEach(registration -> oauth2AuthenticationUrls.put(registration.getClientName(), authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
-        model.addAttribute("urls", oauth2AuthenticationUrls);
-
-        return "login";
-    }
-
     @GetMapping("/loginSuccess")
     public String getLoginInfo(Model model, OAuth2AuthenticationToken authentication) {
 

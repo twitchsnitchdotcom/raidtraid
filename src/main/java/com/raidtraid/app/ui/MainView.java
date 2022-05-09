@@ -30,10 +30,8 @@ public class MainView extends VerticalLayout {
 
     public MainView(UserSession userSession) {
         Div div = new Div();
-        div.setText("Hello " + userSession.getUser().getFirstName() + " " + userSession.getUser().getLastName());
+        div.setText("Hello " + userSession.getUser().getUsername());
         div.getElement().getStyle().set("font-size", "xx-large");
-
-        Image image = new Image(userSession.getUser().getPicture(), "User Image");
 
         Button logoutButton = new Button("Logout", click -> {
             UI.getCurrent().getPage().setLocation(LOGOUT_SUCCESS_URL);
@@ -44,22 +42,23 @@ public class MainView extends VerticalLayout {
         });
 
         setAlignItems(Alignment.CENTER);
-        add(div, image, logoutButton, addCarousel());
+        add(div, logoutButton, addCarousel());
     }
 
     public Carousel addCarousel() {
         Carousel carousel = Carousel.create()
                 .withAutoplay()
-                .withDuration(3, TimeUnit.SECONDS);
+                .withDuration(5, TimeUnit.SECONDS);
 // adjust the width and height (optionally)
         carousel.setWidth("600");
         carousel.setHeight("375");
-        IFrame iframe = new IFrame("https://player.twitch.tv/?channel=loltyler1&parent=localhost");
+        carousel.withBorder();
+        Image image = new Image("https://picsum.photos/600/400", "A Random Image");
+        IFrame iframe = new IFrame("https://player.twitch.tv/?channel=loltyler1&parent=localhost:8080");
         iframe.setWidth("500");
         iframe.setHeight("275");
-        Image image = new Image("https://picsum.photos/600/400", "A Random Image");
-        carousel.add(image);
         carousel.add(iframe);
+        carousel.add(image);
         return carousel;
     }
 }

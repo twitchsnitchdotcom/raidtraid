@@ -1,5 +1,6 @@
 package com.raidtraid.app;
 
+import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,18 +25,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/oauth_login", "/loginFailure", "/")
-            .permitAll()
-            .anyRequest()
-            .authenticated()
-            .and()
-            .oauth2Login()
-            .loginPage("/oauth_login")
+        super.configure(http);
+        http.oauth2Login().loginPage("/oauth_login")
             .authorizationEndpoint()
             .baseUri("/oauth2/authorize-client")
             .authorizationRequestRepository(authorizationRequestRepository())
@@ -43,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .tokenEndpoint()
             .accessTokenResponseClient(accessTokenResponseClient())
             .and()
-            .defaultSuccessUrl("/loginSuccess")
+            .defaultSuccessUrl("/dashboard")
             .failureUrl("/loginFailure");
     }
     
