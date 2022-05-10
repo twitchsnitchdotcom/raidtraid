@@ -3,6 +3,9 @@ package com.raidtraid.app.ui.list;
 import com.raidtraid.app.data.UserSession;
 import com.raidtraid.app.data.entity.Contact;
 import com.raidtraid.app.data.service.CrmService;
+import com.raidtraid.app.data.service.RaidService;
+import com.raidtraid.app.dto.Datum;
+import com.raidtraid.app.dto.RaidFindersDTO;
 import com.raidtraid.app.ui.MainLayout;
 import com.vaadin.componentfactory.timeline.Timeline;
 import com.vaadin.componentfactory.timeline.model.Item;
@@ -11,10 +14,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.IFrame;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Section;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -25,6 +25,7 @@ import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -43,101 +44,47 @@ import java.util.stream.IntStream;
 @Component
 @Scope("prototype")
 @Route(value="", layout = MainLayout.class)
-@PageTitle("Contacts | Vaadin CRM")
+@PageTitle("Dashboard | Vaadin CRM")
 @PermitAll
 public class ListView extends VerticalLayout {
 
     CrmService service;
 
-    Grid<Contact> grid = new Grid<>(Contact.class);
-    TextField filterText = new TextField();
-    ContactForm form;
+    RaidService raidService;
 
-    public ListView(CrmService service) {
+    Grid<Datum> grid = new Grid<>(Datum.class, false);
+
+    public ListView(CrmService service, RaidService raidService) {
 
         this.service = service;
+        this.raidService = raidService;
         addClassName("list-view");
         setSizeFull();
         configureGrid();
-
-        form = new ContactForm(service.findAllCompanies(), service.findAllStatuses());
-        form.setWidth("25em");
-        form.addListener(ContactForm.SaveEvent.class, this::saveContact);
-        form.addListener(ContactForm.DeleteEvent.class, this::deleteContact);
-        form.addListener(ContactForm.CloseEvent.class, e -> closeEditor());
-
-        FlexLayout content = new FlexLayout(grid, form);
-        content.setFlexGrow(2, grid);
-        content.setFlexGrow(1, form);
-        content.setFlexShrink(0, form);
-        content.addClassNames("content", "gap-m");
-        content.setSizeFull();
-
-        add(addTimeLine(), getToolbar(), content);
+        add(new H3("Stream Timeline"), addTimeLine(), new H3("Suggested Raiders"), this.grid);
         updateList();
-        closeEditor();
-        grid.asSingleSelect().addValueChangeListener(event ->
-            editContact(event.getValue()));
     }
 
     private void configureGrid() {
+        RaidFindersDTO raidFindersDTO = this.raidService.readFile();
         grid.addClassNames("contact-grid");
         grid.setSizeFull();
-        grid.setColumns("firstName", "lastName", "email");
-        grid.addColumn(contact -> contact.getStatus().getName()).setHeader("Status");
-        grid.addColumn(contact -> contact.getCompany().getName()).setHeader("Company");
+
+        //grid.setColumns("liveMinutes", "liveViewers");
+        Grid.Column<Datum> datumColumn = grid.addComponentColumn(i -> {
+            Image image = new Image(i.getLogo(), "alt text");
+            image.setHeight("50px");
+            image.setWidth("50px");
+            return image;
+        }).setHeader("Image");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+        grid.setColumnOrder(datumColumn);
+        grid.setItems(new ListDataProvider<>(raidFindersDTO.getData()));
     }
 
-    private HorizontalLayout getToolbar() {
-        filterText.setPlaceholder("Filter by name...");
-        filterText.setClearButtonVisible(true);
-        filterText.setValueChangeMode(ValueChangeMode.LAZY);
-        filterText.addValueChangeListener(e -> updateList());
-
-        Button addContactButton = new Button("Add contact");
-        addContactButton.addClickListener(click -> addContact());
-
-        HorizontalLayout toolbar = new HorizontalLayout(filterText, addContactButton);
-        toolbar.addClassName("toolbar");
-        return toolbar;
-    }
-
-    private void saveContact(ContactForm.SaveEvent event) {
-        service.saveContact(event.getContact());
-        updateList();
-        closeEditor();
-    }
-
-    private void deleteContact(ContactForm.DeleteEvent event) {
-        service.deleteContact(event.getContact());
-        updateList();
-        closeEditor();
-    }
-
-    public void editContact(Contact contact) {
-        if (contact == null) {
-            closeEditor();
-        } else {
-            form.setContact(contact);
-            form.setVisible(true);
-            addClassName("editing");
-        }
-    }
 
     private void updateList() {
-        grid.setItems(service.findAllContacts(filterText.getValue()));
-    }
 
-    void addContact() {
-        grid.asSingleSelect().clear();
-        editContact(new Contact());
-    }
-
-    private void closeEditor() {
-        form.setContact(null);
-        form.setVisible(false);
-        removeClassName("editing");
     }
 
 private Timeline addTimeLine(){
