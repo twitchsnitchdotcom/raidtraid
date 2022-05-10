@@ -11,7 +11,7 @@ import org.vaadin.artur.helpers.LaunchUtil;
 
 @NpmPackage(value = "lumo-css-framework", version = "^4.0.10")
 @Theme("flowcrmtutorial")
-@PWA(name = "RaidTraid", shortName = "RT", offlinePath="offline.html", offlineResources = { "./images/offline.png"})
+@PWA(name = "RaidTraid", shortName = "RT", offlinePath="offline.html", offlineResources = { "c"})
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 

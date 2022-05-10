@@ -2,8 +2,10 @@ package com.raidtraid.app.ui;
 
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -18,27 +20,28 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 	private static final String OAUTH_URL = "/oauth2/authorize-client/twitch";
 	public LoginView(@Autowired Environment env){
 
-		String clientkey = env.getProperty("spring.security.oauth2.client.registration.twitch.client-id");
+		add(logoLayout());
+			Image loginImage = new Image("images/login-30.png", "Login With Twitch");
 
-		// Check that oauth keys are present
-		if (clientkey == null || clientkey.isEmpty()) {
-			Paragraph text = new Paragraph("Could not find OAuth client key in application.properties. "
-					+ "Please double-check the key and refer to the README.md file for instructions.");
-			text.getStyle().set("padding-top", "100px");
-			add(text);
-		} else {
-			Anchor loginLink = new Anchor(OAUTH_URL, "Login with TWITCH");
+			Anchor loginLink = new Anchor(OAUTH_URL, "");
 			// Set router-ignore attribute so that Vaadin router doesn't handle the login request
 			loginLink.getElement().setAttribute("router-ignore", true);
 			loginLink.getStyle().set("margin-top", "100px");
+			loginLink.add(loginImage);
 			add(loginLink);
-		}
 
 		addClassName("login-view");
 		setSizeFull();
 		setAlignItems(Alignment.CENTER); 
 		setJustifyContentMode(JustifyContentMode.CENTER);
 
+	}
+
+	public HorizontalLayout logoLayout(){
+		HorizontalLayout layout = new HorizontalLayout();
+		Image logoImage = new Image("images/logo-65	.png", "RaidTrad");
+		layout.add(logoImage);
+		return layout;
 	}
 
 	@Override
