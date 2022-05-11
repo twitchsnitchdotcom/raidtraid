@@ -2,6 +2,7 @@ package com.raidtraid.app.ui;
 
 import com.raidtraid.app.data.service.DataService;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
@@ -18,8 +19,7 @@ import de.mekaso.vaadin.addon.compani.Animator;
 import de.mekaso.vaadin.addon.compani.animation.Animation;
 import de.mekaso.vaadin.addon.compani.animation.AnimationBuilder;
 import de.mekaso.vaadin.addon.compani.animation.AnimationTypes;
-import de.mekaso.vaadin.addon.compani.effect.HideEffect;
-import de.mekaso.vaadin.addon.compani.effect.ShowEffect;
+import de.mekaso.vaadin.addon.compani.effect.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
@@ -29,31 +29,17 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
 	final Animator animator = Animator.init(UI.getCurrent());
 	private static final String OAUTH_URL = "/oauth2/authorize-client/twitch";
-
+	private Button animateButton = new Button("animate");
+	private Button entranceButton = new Button("entrance");
+	private Button exitButton = new Button("exit");
 	private final DataService dataService;
 
 	public LoginView(@Autowired Environment env, DataService dataService){
 
-		H1 headline = new H1("Text Animations");
-
-		AnimatedComponent animatedLabel = animator.prepareComponent(headline);
-
-		Animation hideAnimation = AnimationBuilder
-				.createBuilder()
-				.create(AnimationTypes.HideAnimation.class)
-				.withEffect(HideEffect.powerOff);
-		animatedLabel.animateAndHide(hideAnimation);
-
-		Animation showAnimation = AnimationBuilder
-				.createBuilder()
-				.create(AnimationTypes.ShowAnimation.class)
-				.withEffect(ShowEffect.powerOn);
-		animatedLabel.showAnimated(showAnimation);
-
 		this.dataService = dataService;
 		add(logoLayout());
+		addAnimations();
 			Image loginImage = new Image("images/login-30.png", "Login With Twitch");
-
 			Anchor loginLink = new Anchor(OAUTH_URL, "");
 			// Set router-ignore attribute so that Vaadin router doesn't handle the login request
 			loginLink.getElement().setAttribute("router-ignore", true);
@@ -65,7 +51,6 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 		setSizeFull();
 		setAlignItems(Alignment.CENTER); 
 		setJustifyContentMode(JustifyContentMode.CENTER);
-		add(headline);
 
 	}
 
@@ -74,6 +59,35 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 		Image logoImage = new Image("images/logo-65	.png", "RaidTrad");
 		layout.add(logoImage);
 		return layout;
+	}
+
+	public void addAnimations(){
+		H1 headline = new H1("Text Animations");
+		AnimatedComponent animatedLabel = animator.prepareComponent(headline);
+
+		this.animateButton.addClickListener(click -> {
+			animatedLabel.animate(
+					AnimationBuilder
+							.createBuilder()
+							.create(AnimationTypes.TextAnimation.class)
+							.withEffect(TextDisplayEffect.Effect3D));
+		});
+		this.entranceButton.addClickListener(click -> { // see effect after add(headline) is called
+			animatedLabel.registerEntranceAnimation(
+					AnimationBuilder
+							.createBuilder()
+							.create(AnimationTypes.TextEntranceAnimation.class)
+							.withEffect(TextEntranceEffect.Typing));
+		});
+		this.exitButton.addClickListener(click -> {
+			animatedLabel.removeWithAnimation(
+					AnimationBuilder
+							.createBuilder()
+							.create(AnimationTypes.TextExitAnimation.class)
+							.withEffect(TextExitEffect.ScaleYOut));
+		});
+		add(this.animateButton, this.entranceButton, this.exitButton);
+
 	}
 
 	@Override
