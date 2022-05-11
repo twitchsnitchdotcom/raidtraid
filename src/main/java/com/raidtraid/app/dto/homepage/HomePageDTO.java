@@ -1,42 +1,62 @@
 package com.raidtraid.app.dto.homepage;
 
+import com.raidtraid.app.data.annotations.UIElement;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomePageDTO {
+
     private Integer dayRange;
+
+    @UIElement(description = "Hours Watched")
     private String hoursWatched;
     private Double hoursWatchedPercentageChange;
     private String hoursWatchedChangeAmount;
 
+    @UIElement(description = "Average Viewers")
     private String averageViewers;
     private Double averageViewersPercentageChange;
     private String averageViewersChangeAmount;
 
-
+    @UIElement(description = "Peak Viewers")
     private String peakViewers;
     private Double peakViewersPercentageChange;
     private String peakViewersChangeAmount;
 
+    @UIElement(description = "Peak Streams")
     private String peakStreams;
     private Double peakStreamsPercentageChange;
     private String peakStreamsChangeAmount;
 
+    @UIElement(description = "Average Channels")
     private String averageChannels;
     private Double averageChannelsPercentageChange;
     private String averageChannelsChangeAmount;
 
+    @UIElement(description = "Games Streamed")
     private String gamesStreamed;
     private Double gamesStreamedPercentageChange;
     private String gamesStreamedChangeAmount;
 
     private String viewerRatio;
 
+    @UIElement(description = "Most Watched Channels")
     private List<HomePageElementDTO> mostWatchedChannels = new ArrayList<>();
+
+    @UIElement(description = "Most Watched Games")
     private List<HomePageElementDTO> mostWatchedGames = new ArrayList<>();
+
+    @UIElement(description = "Trending Games")
     private List<HomePageElementDTO> trendingGames = new ArrayList<>();
+
+    @UIElement(description = "Fastest Growing Channels")
     private List<HomePageElementDTO> fastestGrowingChannels = new ArrayList<>();
+
+    @UIElement(description = "Most Streamed Games")
     private List<HomePageElementDTO> mostStreamedGames = new ArrayList<>();
+
+    @UIElement(description = "Most Viewed Streams")
     private List<HomePageElementDTO> mostViewedStreams = new ArrayList<>();
 
     public Integer getDayRange() {

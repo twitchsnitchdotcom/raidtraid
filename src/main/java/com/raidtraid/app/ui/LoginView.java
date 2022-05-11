@@ -6,10 +6,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.JavaScript;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -18,6 +15,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import de.mekaso.vaadin.addons.Carousel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
@@ -26,10 +24,12 @@ import org.springframework.core.env.Environment;
 public class LoginView extends VerticalLayout implements BeforeEnterObserver, Animated {
 
 	private static final String OAUTH_URL = "/oauth2/authorize-client/twitch";
-	private Button animateButton = new Button("animate");
-	private Button entranceButton = new Button("entrance");
-	private Button exitButton = new Button("exit");
 	private final DataService dataService;
+
+	private static final int WIDTH = 465;
+	private static final int HEIGHT = 275;
+	private static final int OFFSET = 20;
+	private static final int DEFAULT_ELEMENTS = 3;
 
 	public LoginView(@Autowired Environment env, DataService dataService){
 
@@ -99,6 +99,43 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver, An
 
 		comboBox.setValue(Animated.Animation.ROLL_IN);
 
+	}
+
+	public void generateAnnimatedComponents(){
+
+		Carousel carousel = Carousel.create();
+		carousel.setWidth(WIDTH + "px");
+		carousel.setHeight(HEIGHT + "px");
+		for (int i = 1; i <= DEFAULT_ELEMENTS; i++) {
+			carousel.add(createSimpleDiv(i));
+		}
+
+		add(carousel);
+
+		//summary stats
+
+
+		//Most Watched Channels
+
+		//Most Watched Games
+
+		//Trending Games
+
+		//Fastest Growing Channels
+
+		//Most Streamed Games
+
+		//Most Viewed Streams
+	}
+
+	private Div createSimpleDiv(Integer value) {
+		Div content = new Div();
+		IFrame iframe = new IFrame("https://player.twitch.tv/?channel=" + dataService.getRaidFinder().getData().get(value).getUrl() + "&parent=localhost");
+		iframe.setWidth("465px");
+		iframe.setHeight("275px");
+		content.add(iframe);
+//		content.add(new H1(channels[value]));
+		return content;
 	}
 
 	@Override
