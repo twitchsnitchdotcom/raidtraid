@@ -91,30 +91,28 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver, An
 		carousel.setWidth(WIDTH + "px");
 		carousel.setHeight(HEIGHT + "px");
 		for (int i = 1; i <= DEFAULT_ELEMENTS; i++) {
-			carousel.add(createGrid());
+			carousel.add(gridList.get(i));
 		}
 
 		add(carousel);
 
-		//summary stats
-
-
-		//Most Watched Channels
-
-		//Most Watched Games
-
-		//Trending Games
-
-		//Fastest Growing Channels
-
-		//Most Streamed Games
-
-		//Most Viewed Streams
 	}
 
 	public void createGridList(){
 		HomePageDTO homePage = dataService.getHomePage();
+
+		//Most Watched Channels
+		gridList.add(createGrid(homePage.getMostWatchedChannels()));
+		//Most Watched Games
+		gridList.add(createGrid(homePage.getMostWatchedGames()));
+		//Trending Games
+		gridList.add(createGrid(homePage.getTrendingGames()));
+		//Fastest Growing Channels
 		gridList.add(createGrid(homePage.getFastestGrowingChannels()));
+		//Most Streamed Games
+		gridList.add(createGrid(homePage.getMostStreamedGames()));
+		//Most Viewed Streams
+		gridList.add(createGrid(homePage.getMostViewedStreams()));
 	}
 
 	public Grid createGrid(List<HomePageElementDTO> items){
