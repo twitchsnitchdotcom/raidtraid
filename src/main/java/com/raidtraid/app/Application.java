@@ -4,7 +4,6 @@ import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
-import de.mekaso.vaadin.addon.compani.ResourceLoaderServlet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -22,9 +21,6 @@ public class Application extends SpringBootServletInitializer implements AppShel
 		LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
 	}
 
-	@Bean
-	public ServletRegistrationBean registerComponentAnimations() {
-		return new ServletRegistrationBean(new ResourceLoaderServlet(), "/compani/compani.js");
-	}
+
 
 }

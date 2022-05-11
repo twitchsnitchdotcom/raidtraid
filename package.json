@@ -405,9 +405,9 @@
     "construct-style-sheets-polyfill": "$construct-style-sheets-polyfill",
     "date-fns": "$date-fns",
     "lit": "$lit",
-    "lumo-css-framework": "$lumo-css-framework",
     "chokidar": "$chokidar",
     "moment": "$moment",
-    "vis-timeline": "$vis-timeline"
+    "vis-timeline": "$vis-timeline",
+    "lumo-css-framework": "$lumo-css-framework"
   }
 }
