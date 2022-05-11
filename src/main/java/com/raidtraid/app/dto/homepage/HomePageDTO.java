@@ -1,4 +1,4 @@
-package com.raidtraid.app.dto;
+package com.raidtraid.app.dto.homepage;
 
 import java.util.ArrayList;
 import java.util.List;

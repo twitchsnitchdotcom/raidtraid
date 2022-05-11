@@ -1,6 +1,7 @@
 package com.raidtraid.app.ui;
 
 import com.raidtraid.app.data.UserSession;
+import com.raidtraid.app.data.service.DataService;
 import com.raidtraid.app.security.SecurityService;
 import com.raidtraid.app.ui.list.ListView;
 import com.vaadin.flow.component.Component;
@@ -35,10 +36,9 @@ import java.util.stream.IntStream;
 public class MainLayout extends AppLayout {
 
     private final SecurityService securityService;
+    private final DataService dataService;
 
     private static final long serialVersionUID = 1L;
-
-    private static final String[] channels = {"trainwreckstv", "emiru", "noway4u_sir", "silvername"};
     private static final int WIDTH = 465;
     private static final int HEIGHT = 275;
     private static final int OFFSET = 20;
@@ -56,9 +56,10 @@ public class MainLayout extends AppLayout {
 
     UserSession userSession;
 
-    public MainLayout(SecurityService securityService, UserSession userSession) {
+    public MainLayout(SecurityService securityService, UserSession userSession, DataService dataService) {
         this.securityService = securityService;
         this.userSession = userSession;
+        this.dataService = dataService;
         createHeader();
         addToDrawer(createDrawer());
         setDrawerOpened(true);
@@ -67,7 +68,7 @@ public class MainLayout extends AppLayout {
 
     private Div createSimpleDiv(Integer value) {
         Div content = new Div();
-        IFrame iframe = new IFrame("https://player.twitch.tv/?channel=" + channels[value] + "&parent=localhost");
+        IFrame iframe = new IFrame("https://player.twitch.tv/?channel=" + dataService.getRaidFinder().getData().get(value).getUrl() + "&parent=localhost");
         iframe.setWidth("465px");
         iframe.setHeight("275px");
         content.add(iframe);

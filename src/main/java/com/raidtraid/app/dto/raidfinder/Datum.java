@@ -1,5 +1,5 @@
 
-package com.raidtraid.app.dto;
+package com.raidtraid.app.dto.raidfinder;
 
 import java.util.HashMap;
 import java.util.Map;

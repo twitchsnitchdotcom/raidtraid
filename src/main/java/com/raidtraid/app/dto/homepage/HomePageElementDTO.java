@@ -1,4 +1,4 @@
-package com.raidtraid.app.dto;
+package com.raidtraid.app.dto.homepage;
 
 public class HomePageElementDTO {
 
