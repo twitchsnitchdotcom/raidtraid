@@ -68,15 +68,15 @@ public class MainLayout extends AppLayout {
 
     }
 
-    private Div createSimpleDiv(Integer value) {
-        Div content = new Div();
-        IFrame iframe = new IFrame("https://player.twitch.tv/?channel=" + dataService.getRaidFinder().getData().get(value).getUrl() + "&parent=localhost");
-        iframe.setWidth("465px");
-        iframe.setHeight("275px");
-        content.add(iframe);
-//		content.add(new H1(channels[value]));
-        return content;
-    }
+//    private Div createSimpleDiv(Integer value) {
+//        Div content = new Div();
+//        IFrame iframe = new IFrame("https://player.twitch.tv/?channel=" + dataService.getRaidFinder().getData().get(value).getUrl() + "&parent=localhost");
+//        iframe.setWidth("465px");
+//        iframe.setHeight("275px");
+//        content.add(iframe);
+////		content.add(new H1(channels[value]));
+//        return content;
+//    }
 
 
 
@@ -119,63 +119,64 @@ public class MainLayout extends AppLayout {
         div.getElement().getStyle().set("font-size", "xx-large");
         div.getElement().getStyle().set("padding-bottom","10px");
 
-        Carousel carousel = Carousel.create();
-        carousel.setWidth(WIDTH + "px");
-        carousel.setHeight(HEIGHT + "px");
-        for (int i = 1; i <= DEFAULT_ELEMENTS; i++) {
-            carousel.add(createSimpleDiv(i));
-        }
-
-        this.numberOfElements = new IntegerField();
-        numberOfElements.setValue(DEFAULT_ELEMENTS);
-        numberOfElements.setHasControls(true);
-        numberOfElements.setMin(3);
-        numberOfElements.setMax(12);
-        numberOfElements.setLabel("Elements");
-
-        this.nextButton = new Button(VaadinIcon.CARET_SQUARE_RIGHT_O.create(), click -> {
-            carousel.next();
-        });
-        this.prevButton = new Button(VaadinIcon.CARET_SQUARE_LEFT_O.create(), click -> {
-            carousel.prev();
-        });
-        this.directNavi = new ComboBox<>("Direct Navigation");
-        this.directNavi.setItems(IntStream.rangeClosed(1, (int) carousel.getChildren().count()).boxed().collect(Collectors.toList()));
-        this.directNavi.setValue(Integer.valueOf(1));
-        this.directNavi.addValueChangeListener(change -> {
-            if (this.directNavi.getValue() != null) {
-                int index = this.directNavi.getValue() - 1;
-                //Component targetComponent = carousel.getChildren().collect(Collectors.toList()).get(index);
-                //carousel.show(targetComponent);
-                carousel.show(index);
-            }
-        });
-        this.autoplay = new Checkbox("Autoplay");
-        autoplay.addValueChangeListener(valueChange -> {
-            if (autoplay.getValue() != null && autoplay.getValue()) {
-                carousel.withAutoplay();
-            } else {
-                carousel.stop();
-            }
-        });
-
-        Button infoButton = new Button("Info", (clickEvent) -> {
-            String message = String.format("There is a %s (index %s) on center stage",
-                    carousel.getSelectedComponent().getClass().getSimpleName(),
-                    carousel.getSelectedIndex());
-            Notification.show(message);
-        });
-
-        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(prevButton, nextButton, directNavi, autoplay, infoButton);
-        section.setTitle("Server side controls");
-        VerticalLayout vl = new VerticalLayout(section);
-        vl.setSizeUndefined();
+//        Carousel carousel = Carousel.create();
+//        carousel.setWidth(WIDTH + "px");
+//        carousel.setHeight(HEIGHT + "px");
+//        for (int i = 1; i <= DEFAULT_ELEMENTS; i++) {
+//            carousel.add(createSimpleDiv(i));
+//        }
+//
+//        this.numberOfElements = new IntegerField();
+//        numberOfElements.setValue(DEFAULT_ELEMENTS);
+//        numberOfElements.setHasControls(true);
+//        numberOfElements.setMin(3);
+//        numberOfElements.setMax(12);
+//        numberOfElements.setLabel("Elements");
+//
+//        this.nextButton = new Button(VaadinIcon.CARET_SQUARE_RIGHT_O.create(), click -> {
+//            carousel.next();
+//        });
+//        this.prevButton = new Button(VaadinIcon.CARET_SQUARE_LEFT_O.create(), click -> {
+//            carousel.prev();
+//        });
+//        this.directNavi = new ComboBox<>("Direct Navigation");
+//        this.directNavi.setItems(IntStream.rangeClosed(1, (int) carousel.getChildren().count()).boxed().collect(Collectors.toList()));
+//        this.directNavi.setValue(Integer.valueOf(1));
+//        this.directNavi.addValueChangeListener(change -> {
+//            if (this.directNavi.getValue() != null) {
+//                int index = this.directNavi.getValue() - 1;
+//                //Component targetComponent = carousel.getChildren().collect(Collectors.toList()).get(index);
+//                //carousel.show(targetComponent);
+//                carousel.show(index);
+//            }
+//        });
+//        this.autoplay = new Checkbox("Autoplay");
+//        autoplay.addValueChangeListener(valueChange -> {
+//            if (autoplay.getValue() != null && autoplay.getValue()) {
+//                carousel.withAutoplay();
+//            } else {
+//                carousel.stop();
+//            }
+//        });
+//
+//        Button infoButton = new Button("Info", (clickEvent) -> {
+//            String message = String.format("There is a %s (index %s) on center stage",
+//                    carousel.getSelectedComponent().getClass().getSimpleName(),
+//                    carousel.getSelectedIndex());
+//            Notification.show(message);
+//        });
+//
+//        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(prevButton, nextButton, directNavi, autoplay, infoButton);
+//        section.setTitle("Server side controls");
+//        VerticalLayout vl = new VerticalLayout(section);
+//        vl.setSizeUndefined();
 
 
         //super.getStyle().set("justify-content", "space-evenly");
         //super.getStyle().set("flex-direction", "column");
 
-        verticalLayout.add(div, vl, carousel);
+        //verticalLayout.add(div, vl, carousel);
+        verticalLayout.add(div);
 
         return verticalLayout;
     }

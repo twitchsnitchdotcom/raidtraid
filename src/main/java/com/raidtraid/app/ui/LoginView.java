@@ -81,6 +81,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver, An
 
 		horizontalLayout.add(sandbox);
 		add(horizontalLayout);
+		createGridList();
 		generateAnnimatedComponents();
 
 	}
